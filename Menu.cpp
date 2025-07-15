@@ -17,6 +17,7 @@ void Menu::showMenu(size_t selected)
         "Remover Album",
         "Ver Perfil e Albuns",
         "Adicionar a Watchlist",
+        "Gerenciar Favoritos",   // <<-- novo
         "Alterar Cores",
         "Sair"
     };
@@ -42,14 +43,13 @@ void Menu::showMenu(size_t selected)
     cout << "\033[0m"; // Resetar cores
 }
 
-
 void Menu::menuUsuario()
 {
     Perfil u;
-    carregarPerfil(u); 
+    carregarPerfil(u);
 
     size_t selected = 0;
-    const size_t max_options = 7;
+    const size_t max_options = 8; // agora são 8 opções
     bool sair = false;
 
     while(!sair)
@@ -90,7 +90,7 @@ void Menu::menuUsuario()
                             { "[|||] ", "( o ) ", " \\_/  " },
                             { " /^^\\ ", "( O O)", " \\_-_/" },
                             { "^\\  /^", "( o o)", "  \\_/ " },
-                            { "=^_^= ", "(o o )", "(\")(\")" },
+                            { "=^_^= ", "(o o )", "(\\\")(\\\")" },
                             { " .---.", "| o o |", " \\_^_/ " }
                         };
 
@@ -138,7 +138,7 @@ void Menu::menuUsuario()
                         break;
                     }
 
-                case 1:   //No primeiro caso, ao adicionar um álbum, o usuário é solicitado a inserir os detalhes do álbum, como título, nome do artista, ano de lançamento e nota. O álbum é então adicionado à lista de álbuns ouvidos do usuário.
+                case 1:   //Adicionar Album
                     {
                         std::string titulo, nomeAutor;
                         double nota;
@@ -152,12 +152,15 @@ void Menu::menuUsuario()
 
                         std::cout << "Nota (0-5): ";
                         std::cin >> nota;
-                        std::cin.ignore(); // limpa buffer do Enter
+                        std::cin.ignore();
 
-                        Autor autor{ nomeAutor, {} };  // Inicializa autor com nome e vetor vazio
+                        Autor autor{ nomeAutor, {} };
+                        // anoLancamento não foi lido antes — adicione a leitura:
+                        std::cout << "Ano de lançamento: ";
+                        std::cin >> anoLancamento;
+                        std::cin.ignore();
 
                         u.Albuns().GetAlbuns().emplace_back(titulo, autor, anoLancamento, nota);
-
                         salvarPerfil(u);
 
                         std::cout << "\n✅ Álbum \"" << titulo << "\" do artista \"" << nomeAutor << "\" adicionado com sucesso!\n";
@@ -166,7 +169,8 @@ void Menu::menuUsuario()
 
                         break;
                     }
-                case 2: // No segundo caso, o usuário é solicitado a escolher entre remover um álbum da lista de álbuns ouvidos ou da watchlist. Dependendo da escolha, o programa exibe a lista correspondente e permite que o usuário remova um álbum selecionado.
+
+                case 2: //Remover Album
                     {
                         std::cout << "De qual lista você deseja remover o álbum?\n";
                         std::cout << "1. Álbum Ouvido\n";
@@ -179,7 +183,6 @@ void Menu::menuUsuario()
                         if(escolha == 1)
                         {
                             auto& lista = u.Albuns().GetAlbuns();
-
                             if(lista.empty())
                             {
                                 std::cout << "Nenhum álbum ouvido.\nPressione Enter...";
@@ -197,25 +200,20 @@ void Menu::menuUsuario()
                             std::cin >> idxInput;
                             std::cin.ignore();
 
-                            if(idxInput > 0)
+                            if(idxInput > 0 && idxInput <= (int)lista.size())
                             {
-                                size_t idx = static_cast<size_t>(idxInput);
-                                if(idx <= lista.size())
-                                {
-                                    lista.erase(lista.begin() + idx - 1);
-                                    salvarPerfil(u);
-                                    std::cout << "Álbum removido da lista de ouvidos.\n";
-                                }
-                                else
-                                {
-                                    std::cout << "Índice fora do intervalo.\n";
-                                }
+                                lista.erase(lista.begin() + (idxInput - 1));
+                                salvarPerfil(u);
+                                std::cout << "Álbum removido da lista de ouvidos.\n";
+                            }
+                            else
+                            {
+                                std::cout << "Índice fora do intervalo.\n";
                             }
                         }
                         else if(escolha == 2)
                         {
                             auto& watchlist = u.Watchlist().GetWatchlist();
-
                             if(watchlist.empty())
                             {
                                 std::cout << "Nenhum álbum na Watchlist.\nPressione Enter...";
@@ -232,19 +230,15 @@ void Menu::menuUsuario()
                             std::cin >> idxInput;
                             std::cin.ignore();
 
-                            if(idxInput > 0)
+                            if(idxInput > 0 && idxInput <= (int)watchlist.size())
                             {
-                                size_t idx = static_cast<size_t>(idxInput);
-                                if(idx <= watchlist.size())
-                                {
-                                    watchlist.erase(watchlist.begin() + idx - 1);
-                                    salvarPerfil(u);
-                                    std::cout << "Álbum removido da Watchlist.\n";
-                                }
-                                else
-                                {
-                                    std::cout << "Índice fora do intervalo.\n";
-                                }
+                                watchlist.erase(watchlist.begin() + (idxInput - 1));
+                                salvarPerfil(u);
+                                std::cout << "Álbum removido da Watchlist.\n";
+                            }
+                            else
+                            {
+                                std::cout << "Índice fora do intervalo.\n";
                             }
                         }
                         else
@@ -255,7 +249,7 @@ void Menu::menuUsuario()
                         break;
                     }
 
-                case 3:
+                case 3: //Ver Perfil e Albuns
                     {
                         limparTela();
                         u.MostrarPerfil();
@@ -264,33 +258,108 @@ void Menu::menuUsuario()
                         break;
                     }
 
-                case 4: // No quarto caso, o usuário insere o título e o nome do artista para adicionar um álbum à Watchlist.
+                case 4: //Adicionar à Watchlist
                     {
                         std::string titulo, nomeAutor;
 
                         std::cout << "Título: ";
-                        std::getline(std::cin >> std::ws, titulo); // std::ws ignora espaços pendentes
+                        std::getline(std::cin >> std::ws, titulo);
 
                         std::cout << "Nome do artista: ";
                         std::getline(std::cin, nomeAutor);
 
-                        Autor autor{ nomeAutor, {} };  // Inicializa autor com nome e vetor vazio
-
-                        // Ano e nota ficam como 0 por padrão, já que está apenas na Watchlist
+                        Autor autor{ nomeAutor, {} };
                         u.Watchlist().GetWatchlist().emplace_back(titulo, autor, 0, 0.0);
-
                         salvarPerfil(u);
 
                         std::cout << "\n✅ Álbum \"" << titulo << "\" do artista \"" << nomeAutor << "\" adicionado à Watchlist com sucesso!\n";
                         std::cout << "Pressione Enter para continuar...";
                         std::cin.ignore();
-
                         break;
                     }
-                case 5:
+
+                case 5: //Gerenciar Favoritos
+                    {
+                        std::cout << "O que deseja fazer com os Favoritos?\n";
+                        std::cout << " 1. Adicionar Favorito\n";
+                        std::cout << " 2. Remover Favorito\n";
+                        std::cout << " 3. Editar Favorito\n";
+                        std::cout << " 4. Listar Favoritos\n";
+                        std::cout << " 0. Cancelar\n";
+                        std::cout << "Escolha: ";
+                        int opt;
+                        std::cin >> opt;
+                        std::cin.ignore();
+
+                        if(opt == 1)
+                        {
+                            std::string titulo, nomeAutor;
+                            int anoLancamento;
+                            double nota;
+
+                            std::cout << "Título: ";
+                            std::getline(std::cin, titulo);
+                            std::cout << "Nome do artista: ";
+                            std::getline(std::cin, nomeAutor);
+                            std::cout << "Ano: ";
+                            std::cin >> anoLancamento; std::cin.ignore();
+                            std::cout << "Nota (0-5): ";
+                            std::cin >> nota; std::cin.ignore();
+
+                            Autor autor{ nomeAutor, {} };
+                            Album alb{ titulo, autor, anoLancamento, nota };
+                            u.FavoritosColecao().Adicionar(alb);
+                            salvarPerfil(u);
+
+                        }
+                        else if(opt == 2)
+                        {
+                            std::cout << "Informe o título a remover: ";
+                            std::string t;
+                            std::getline(std::cin, t);
+                            u.FavoritosColecao().Remover(t);
+                            salvarPerfil(u);
+
+                        }
+                        else if(opt == 3)
+                        {
+                            std::cout << "Título atual: ";
+                            std::string oldT;
+                            std::getline(std::cin, oldT);
+
+                            std::string novoTitulo, novoAutor;
+                            int novoAno;
+                            double novaNota;
+                            std::cout << "Novo título: ";
+                            std::getline(std::cin, novoTitulo);
+                            std::cout << "Novo artista: ";
+                            std::getline(std::cin, novoAutor);
+                            std::cout << "Novo ano: ";
+                            std::cin >> novoAno; std::cin.ignore();
+                            std::cout << "Nova nota (0-5): ";
+                            std::cin >> novaNota; std::cin.ignore();
+
+                            Autor autorEdit{ novoAutor, {} };
+                            Album albEdit{ novoTitulo, autorEdit, novoAno, novaNota };
+                            u.FavoritosColecao().Editar(oldT, albEdit);
+                            salvarPerfil(u);
+
+                        }
+                        else if(opt == 4)
+                        {
+                            u.FavoritosColecao().Listar();
+                            std::cout << "Pressione Enter para continuar...";
+                            std::cin.ignore();
+                        }
+                        // opt == 0 ou inválido: volta ao menu
+                        break;
+                    }
+
+                case 6:
                     alterarCores();
                     break;
-                case 6:
+
+                case 7:
                     mostrarAnimacao();
                     sair = true;
                     break;
@@ -298,5 +367,3 @@ void Menu::menuUsuario()
         }
     }
 }
-
-
