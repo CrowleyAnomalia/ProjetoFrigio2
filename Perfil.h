@@ -12,7 +12,7 @@ class Perfil
     private:
     std::string nome_;
     std::string cabeca_;// avatar 
-    Favoritos  favs_;// implementar depois
+    Favoritos  favs_;//implementar depois
     std::vector<Resenha> resenhas_;
 
     AlbunsOuvidos albunsOuvidos_; 
