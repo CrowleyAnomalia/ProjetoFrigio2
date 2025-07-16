@@ -6,5 +6,5 @@
 class Banner
 {
     public:
-    static void printBannerAnimado(); // <- nova função animada
+    static void printBannerAnimado(); 
 };

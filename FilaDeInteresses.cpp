@@ -3,17 +3,13 @@
 #include <algorithm>
 #include <iostream>
 
-/*-------------------------------------------------------------
-  Adiciona álbum à fila (encaminha para o vetor herdado)
--------------------------------------------------------------*/
+
 void FilaDeInteresses::Adicionar(const Album& a)
 {
     albuns_.push_back(a);
 }
 
-/*-------------------------------------------------------------
-  Remove álbum pelo título
--------------------------------------------------------------*/
+
 void FilaDeInteresses::Remover(const std::string& titulo)
 {
     auto it = std::find_if(albuns_.begin(), albuns_.end(),
@@ -30,12 +26,10 @@ void FilaDeInteresses::Remover(const std::string& titulo)
     }
 }
 
-/*-------------------------------------------------------------
-  Exibe a fila em forma de “cartões”
--------------------------------------------------------------*/
+
 void FilaDeInteresses::ListarQuadro(int porLinha, int largura) const
 {
-    /* alias: preserva o nome usado no código antigo */
+   
     const auto& filaDeAlbum = albuns_;
 
     const int linhasPorAlbum = 8;

@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 
-#include "AlbunsOuvidos.h"      // derivada de ColecaoAlbuns
-#include "FilaDeInteresses.h"   // derivada de ColecaoAlbuns
+#include "AlbunsOuvidos.h"      //herda de ColecaoAlbuns
+#include "FilaDeInteresses.h"   // herda de ColecaoAlbuns
 #include "Favoritos.h"
 #include "Resenha.h"
 
@@ -12,7 +12,7 @@ class Perfil
     private:
     std::string nome_;
     std::string cabeca_;// avatar 
-    Favoritos  favs_;//implementar depois
+    Favoritos  favs_;//implementar dps
     std::vector<Resenha> resenhas_;
 
     AlbunsOuvidos albunsOuvidos_; 

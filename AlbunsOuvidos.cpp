@@ -5,7 +5,7 @@
 
 void AlbunsOuvidos::ListarQuadro(int porLinha, int largura) const
 {
-    /* alias local: mantém o nome usado no código antigo */
+   
     const auto& albunsOuvidos = albuns_;
 
     const int linhasPorAlbum = 8;

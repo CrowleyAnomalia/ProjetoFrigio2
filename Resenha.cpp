@@ -13,6 +13,6 @@ void Resenha::Mostrar() const
     limparTela();
     std::cout << "══════ Resenha de \"" << album_.GetTitulo() << "\" ══════\n\n";
     std::cout << "Nota: ";
-    Estrelas::GerarEstrelas(nota_);    // adapte para o método que você já usa
+    Estrelas::GerarEstrelas(nota_);   
     std::cout << "\n\n" << texto_ << "\n";
 }

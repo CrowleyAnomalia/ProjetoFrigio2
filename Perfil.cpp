@@ -1,6 +1,6 @@
 ﻿#include "Perfil.h"
 
-#include "ColecaoAlbuns.h"   // classe-base abstrata
+#include "ColecaoAlbuns.h"   // classebase abstrata
 #include "Cores.h"          
 #include <iostream>
 #include <sstream>

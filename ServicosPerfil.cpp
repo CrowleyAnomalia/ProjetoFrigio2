@@ -9,13 +9,13 @@ void salvarPerfil(const Perfil& p, const std::string& arq)
 
     out << p.GetNome() << '\n';
 
-    // -- álbuns avaliados --
+    // --álbuns avaliados
     const auto& vistos = p.Albuns().GetAlbuns();
     out << vistos.size() << '\n';
     for(const auto& alb : vistos)
         out << alb.GetTitulo() << '\n' << alb.GetNota() << '\n';
 
-    // -- watch-list --
+    // -- watch-list 
     const auto& watch = p.Watchlist().GetWatchlist();
     out << watch.size() << '\n';
     for(const auto& alb : watch)
@@ -31,7 +31,7 @@ bool carregarPerfil(Perfil& p, const std::string& arq)
     p.SetNome(std::move(nome));
 
     size_t qtd{};
-    // -- álbuns avaliados --
+    // -- álbuns avaliados 
     in >> qtd; in.ignore();
     p.Albuns().GetAlbuns().clear();
     for(size_t i = 0; i < qtd; ++i)

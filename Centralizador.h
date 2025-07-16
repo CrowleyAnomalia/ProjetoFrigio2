@@ -56,17 +56,17 @@ inline void imprimirCentralizado(const std::vector<std::string>& linhas)
 }
 
 
-/// Devolve quantas colunas a string realmente ocupa no terminal.
+
 inline std::size_t visualLen(const std::string& s)
 {
-    // remove códigos ANSI (ex.: "\033[1;35m")
+    
     static const std::regex ansi(R"(\x1B\[[0-9;]*m)");
     std::string clean = std::regex_replace(s, ansi, "");
 
-    // conta apenas bytes que NÃO são de continuação UTF-8 (10xxxxxx)
+    
     std::size_t cols = 0;
     for(unsigned char ch : clean)
-        if((ch & 0xC0) != 0x80)  // 0x80-0xBF são bytes de continuação
+        if((ch & 0xC0) != 0x80)  
             ++cols;
     return cols;
 }

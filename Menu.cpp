@@ -10,14 +10,14 @@ using namespace std;
 
 void Menu::showMenu(size_t selected)
 {
-    const int largura = 44; // Largura entre as bordas
+    const int largura = 44; 
     string options[] = {
         "Criar Perfil",
         "Adicionar Album",
         "Remover Album",
         "Ver Perfil e Albuns",
         "Adicionar a Watchlist",
-        "Gerenciar Favoritos",   // <<-- novo
+        "Gerenciar Favoritos",   
         "Alterar Cores",
         "Sair"
     };
@@ -278,7 +278,7 @@ void Menu::menuUsuario()
                         break;
                     }
 
-                case 5: //Gerenciar Favoritos
+                case 5: //Gerenciar os favoritos
                     {
                         std::cout << "O que deseja fazer com os Favoritos?\n";
                         std::cout << " 1. Adicionar Favorito\n";
@@ -351,7 +351,7 @@ void Menu::menuUsuario()
                             std::cout << "Pressione Enter para continuar...";
                             std::cin.ignore();
                         }
-                        // opt == 0 ou inválido: volta ao menu
+                        // opt == 0 ou inválido: vota ao menu
                         break;
                     }
 

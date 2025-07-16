@@ -1,14 +1,12 @@
 ﻿#include "Animacao.h"
 #include "Plataforma.h"      // getTerminalSize()
-#include "Centralizador.h"   // visualLen()
+#include "Centralizador.h" //visualLen()
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <sstream>
 
-/*-------------------------------------------------------------
-   Efeito “digitando” caractere a caractere
--------------------------------------------------------------*/
+
 static void printDigitando(const std::string& text, int delayMs = 30)
 {
     for(char c : text)
@@ -19,9 +17,7 @@ static void printDigitando(const std::string& text, int delayMs = 30)
     std::cout << '\n';
 }
 
-/*-------------------------------------------------------------
-   Animação final de encerramento – arte + mensagem centralizadas
--------------------------------------------------------------*/
+
 void mostrarAnimacao()
 {
     /* arte ASCII */
@@ -42,13 +38,12 @@ void mostrarAnimacao()
     limparTela();
     const int larguraTerm = getTerminalSize().width;
 
-    /* -------- imprime a arte centralizada -------- */
+    /* -------- imprime a arte centralizada ----*/
     std::istringstream in(arte);
     std::string linha;
     while(std::getline(in, linha))
     {
-        /* remove indent à esquerda, mas sem lançar exceção
-           se a linha for vazia ou só espaços               */
+       
         std::size_t first = linha.find_first_not_of(' ');
         std::string ltrim = (first == std::string::npos) ? "" : linha.substr(first);
 
@@ -57,16 +52,15 @@ void mostrarAnimacao()
         if(esp < 0) esp = 0;
 
         std::cout << std::string(esp, ' ');
-        printDigitando(ltrim, 5);          // efeito rápido para arte
+        printDigitando(ltrim, 5);          
     }
 
-    /* -------- imprime a mensagem final centralizada -------- */
     int espMsg = (larguraTerm - static_cast<int>(frase.size())) / 2;
     if(espMsg < 0) espMsg = 0;
 
     std::cout << '\n' << std::string(espMsg, ' ');
-    printDigitando(frase, 50);             // efeito mais lento
+    printDigitando(frase, 50);             
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
-    limparTela();                          // tela limpa ao sair
+    limparTela();                         
 }
